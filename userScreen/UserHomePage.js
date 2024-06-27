@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, SafeAreaView, Image } from "react-native";
-import Icon from 'react-native-vector-icons/Ionicons';
 import MainContent from "./MainContent";
 import { useNavigation } from '@react-navigation/native';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,8 +27,8 @@ const UserHomePage = () => {
                         <TouchableOpacity onPress={toggleSideNav} style={styles.appBarLeftItem}>
                             <Text style={styles.menuButton}>☰</Text>
                         </TouchableOpacity>
-                        <Image style={styles.appBarProfileIcon} source={{ uri: 'https://toppng.com/uploads/preview/file-svg-profile-icon-vector-11562942678pprjdh47a8.png' }}/>
-                    </View> 
+                        <Text style={styles.navHead1}>Tectzo</Text>
+                    </View>
                 </View>
                 <View style={styles.content}>
                     <MainContent />
@@ -43,7 +42,7 @@ const UserHomePage = () => {
             >
                 <View style={styles.navTop}>
                     <Text style={styles.navHead}>Tectzo Transport</Text>
-                    <Image style={styles.navImage} source={{ uri: 'https://cdn0.iconfinder.com/data/icons/logistic-icons-rounded/110/Truck-1024.png' }}/>
+                    <Image style={styles.navImage} source={{ uri: 'https://cdn0.iconfinder.com/data/icons/logistic-icons-rounded/110/Truck-1024.png' }} />
                 </View>
                 <View style={styles.navHeader}>
                     <Image source={{ uri: 'https://clipart-library.com/images_k/truck-silhouette-images/truck-silhouette-images-24.png' }} style={styles.truckImage} />
@@ -52,28 +51,32 @@ const UserHomePage = () => {
                 </View>
                 <View style={styles.navItems}>
                     <TouchableOpacity style={styles.navButton}>
-                        <Icon name="settings-outline" size={20} color="#FFFFFF" style={styles.navIcon} />
+                        <Icon name="cog" size={20} color="#FFFFFF" style={styles.navIcon} />
                         <Text style={styles.navButtonText}>Settings</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.navButton}>
-                        <Icon name="log-out-outline" size={20} color="#FFFFFF" style={styles.navIcon} />
+                        <Icon name="sign-out" size={20} color="#FFFFFF" style={styles.navIcon} />
                         <Text style={styles.navButtonText}>Logout</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.navButton}>
-                        <Icon name="help-circle-outline" size={20} color="#FFFFFF" style={styles.navIcon} />
+                        <Icon name="question-circle" size={20} color="#FFFFFF" style={styles.navIcon} />
                         <Text style={styles.navButtonText}>Help</Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>
             {/* Bottom Navigation Bar */}
-            <View style={styles.bottomNavigationBar}>
-                <TouchableOpacity style={styles.bottomNavItem}>
-                    <Icon name="home-outline" size={24} color="#FFFFFF" />
-                    <Text style={styles.bottomNavText}>Home</Text>
+            <View style={styles.bottomNavBar}>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('UserHomePage')}>
+                    <Icon name="home" size={24} color="black" />
+                    <Text>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomNavItem}>
-                    <Icon name="mail-outline" size={24} color="#FFFFFF" />
-                    <Text style={styles.bottomNavText}>Inbox</Text>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('UserInbox')}>
+                    <Icon name="inbox" size={24} color="black" />
+                    <Text>Inbox</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('UserProfile')}>
+                    <Icon name="user" size={24} color="black" />
+                    <Text>Profile</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -102,19 +105,13 @@ const styles = StyleSheet.create({
     appBarLeft: {
         flexDirection: "row",
         flex: 1,
+        alignItems: "center",
         justifyContent: 'space-between',
     },
     appBarLeftItem: {
         flex: 1,
         alignItems: "flex-start",
         justifyContent: 'center',
-    },
-    appBarProfileIcon: {
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-        marginLeft: 20,
-        marginTop: 20,
     },
     navImage: {
         height: 40,
@@ -188,6 +185,13 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         marginTop: 0,
     },
+    navHead1: {
+        color: "#FFFFFF",
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 0,
+        marginTop: 20,
+    },
     navTop: {
         flexDirection: "row",
         alignItems: "center",
@@ -205,16 +209,17 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
     },
-    bottomNavItem: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    bottomNavText: {
-        color: "#FFFFFF",
-        fontSize: 12,
-        marginTop: 4,
-    },
+    bottomNavBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+    backgroundColor: '#f8f8f8',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
 });
 
 export default UserHomePage;

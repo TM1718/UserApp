@@ -7,6 +7,10 @@ import Otp from './userScreen/Otp';
 import EnterUserName from './userScreen/EnterUserName';
 import UserHomePage from './userScreen/UserHomePage';
 import BookTruck from './userScreen/BookTruck';
+import UserInbox from './userScreen/UserInbox';
+import TruckRecords from './userScreen/TruckRecords';
+import UserProfile from './userScreen/UserProfile';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -24,6 +28,9 @@ export default function App() {
         <Stack.Screen name="EnterUserName" component={EnterUserName} />
         <Stack.Screen name='UserHomePage' component={UserHomePage} />
         <Stack.Screen name='BookTruck' component={BookTruck} />
+        <Stack.Screen name='UserInbox' component={UserInbox} />
+        <Stack.Screen name='TruckRecords' component={TruckRecords} />
+        <Stack.Screen name='UserProfile' component={UserProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

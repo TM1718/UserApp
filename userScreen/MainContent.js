@@ -18,7 +18,7 @@ const MainContent = () => {
                     <Text style={styles.cardPara}>Click here to Book truck for you and for a safe pasage!</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card2}>
+            <TouchableOpacity style={styles.card2} onPress={() => navigation.navigate('TruckRecords')}>
                 <View style={styles.cardContent}>
                     <Image style={styles.cardImage} source={{ uri: 'https://img.freepik.com/premium-photo/row-folders-papers-documentation-shelf-office_571754-866.jpg?w=360' }} />
                     <Text style={styles.cardText}>Truck Records</Text>
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         marginBottom: 20,
+        marginTop: 50,
     },
     mainContent: {
         flex: 1,
