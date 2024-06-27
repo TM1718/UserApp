@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, SafeAreaView, Image } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MainContent from "./MainContent";
+import { useNavigation } from '@react-navigation/native';
+
 
 const { width, height } = Dimensions.get('window');
 
 const UserHomePage = () => {
     const [isSideNavVisible, setIsSideNavVisible] = useState(false);
     const sideNavAnim = useState(new Animated.Value(0))[0];
+    const navigation = useNavigation();
 
     const toggleSideNav = () => {
         setIsSideNavVisible(!isSideNavVisible);
