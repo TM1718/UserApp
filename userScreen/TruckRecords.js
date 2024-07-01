@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const TruckRecords = ({ navigation }) => {
-  const isEmpty = true; // Assume inbox is empty for now
+  const isEmpty = true; 
 
   return (
     <View style={{ flex: 1 }}>
@@ -15,7 +15,6 @@ const TruckRecords = ({ navigation }) => {
         <Text style={styles.appBarTitle}>Records</Text>
       </View>
 
-      {/* Main Content */}
       <View style={styles.content}>
         {isEmpty && (
           <View style={styles.emptyInboxContainer}>
@@ -28,7 +27,6 @@ const TruckRecords = ({ navigation }) => {
         )}
       </View>
 
-      {/* Bottom Navigation Bar */}
       <View style={styles.bottomNavBar}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('UserHomePage')}>
           <Icon name="home" size={24} color="black" />

@@ -33,6 +33,7 @@ const UserHomePage = () => {
                 <View style={styles.content}>
                     <MainContent />
                 </View>
+                
             </SafeAreaView>
             <Animated.View
                 style={[
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#F0F0F0",
-        marginBottom: 50,
+        marginBottom: 0,
     },
     appBar: {
         height: 100,
@@ -220,6 +221,8 @@ const styles = StyleSheet.create({
   navItem: {
     alignItems: 'center',
   },
+  
 });
 
 export default UserHomePage;
+
