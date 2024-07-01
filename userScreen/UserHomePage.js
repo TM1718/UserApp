@@ -80,6 +80,10 @@ const UserHomePage = () => {
                     <Text>Profile</Text>
                 </TouchableOpacity>
             </View>
+            {/* Floating Button */}
+            <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('AiPage')}>
+                <Icon name="map" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
         </View>
     );
 };
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     appBar: {
-        height: 100,
+        height: 80,
         width: '100%',
         backgroundColor: "#FF7878",
         flexDirection: "row",
@@ -211,18 +215,28 @@ const styles = StyleSheet.create({
         right: 0,
     },
     bottomNavBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-    backgroundColor: '#f8f8f8',
-  },
-  navItem: {
-    alignItems: 'center',
-  },
-  
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: '#ddd',
+        backgroundColor: '#f8f8f8',
+    },
+    navItem: {
+        alignItems: 'center',
+    },
+    floatingButton: {
+        position: 'absolute',
+        bottom: 80,
+        right: 20,
+        backgroundColor: '#FF7878',
+        width: 50,
+        height: 50,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,
+    },
 });
 
 export default UserHomePage;
-

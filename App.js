@@ -10,7 +10,7 @@ import BookTruck from './userScreen/BookTruck';
 import UserInbox from './userScreen/UserInbox';
 import TruckRecords from './userScreen/TruckRecords';
 import UserProfile from './userScreen/UserProfile';
-
+import AiPage from './userScreen/AiPage';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -31,6 +31,7 @@ export default function App() {
         <Stack.Screen name='UserInbox' component={UserInbox} />
         <Stack.Screen name='TruckRecords' component={TruckRecords} />
         <Stack.Screen name='UserProfile' component={UserProfile} />
+        <Stack.Screen name='AiPage' component={AiPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
