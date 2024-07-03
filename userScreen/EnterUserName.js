@@ -1,11 +1,35 @@
-import React from "react";
-import { View, Text, StyleSheet, Image,TextInput, TouchableOpacity, Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
 const EnterUserName = () => {
     const navigation = useNavigation();
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post('http://192.168.122.105:3000/api/users/login', {
+                phoneNumber,
+                password,
+            });
+            console.log(response.data);
+
+            if (response.data.success) {
+                navigation.navigate('UserHomePage');
+                alert('Welcome!');
+            } else {
+                alert('Invalid phone number or password');
+            }
+        } catch (error) {
+            console.log(error);
+            alert('Error logging in');
+        }
+    };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -22,26 +46,38 @@ const EnterUserName = () => {
 
             <View style={styles.ParentCon}>
                 <View style={styles.buttonCover3}>
-                    <Text style={styles.para3}>Username</Text>
+                    <Text style={styles.para3}>Phone Number</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.text}>Enter your preffered username</Text>   
+                    <Text style={styles.text}>Enter your phone number</Text>
                 </View>
-                
+
                 <View style={styles.buttInp}>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="  eg: John Doe"
+                            placeholder="Phone Number"
                             placeholderTextColor="#aaaaaa"
                             underlineColorAndroid="transparent"
+                            keyboardType="phone-pad"
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            placeholderTextColor="#aaaaaa"
+                            underlineColorAndroid="transparent"
+                            secureTextEntry={true}
+                            value={password}
+                            onChangeText={setPassword}
                         />
                     </View>
+                </View>
 
-            </View>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate("UserHomePage")}
+                    onPress={handleSubmit}
                 >
                     <Text style={styles.buttonText}>Continue</Text>
                 </TouchableOpacity>
@@ -69,7 +105,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
-    ParentCon:{
+    ParentCon: {
         marginTop: 160,
         margin: 10,
     },
@@ -77,7 +113,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: "bold",
     },
-    text:{
+    text: {
         fontSize: 15,
         marginTop: 10,
         color: "#424040",
@@ -93,8 +129,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 1,
+        marginTop: 10,
     },
-    buttInp:{
+    buttInp: {
         marginTop: 40,
     },
     button: {
@@ -104,13 +141,13 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: height-410,
+        marginTop: 50,
     },
     buttonText: {
         fontSize: 16,
         color: '#fff',
         fontWeight: 'bold',
     },
-
 });
+
 export default EnterUserName;

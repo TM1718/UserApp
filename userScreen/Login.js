@@ -7,30 +7,31 @@ const { width, height } = Dimensions.get('window');
 
 const Login = () => {
     const navigation = useNavigation();
+    const [username, setUsername] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = async () => {
         try {
-          const response = await axios.post('http://192.168.122.105:3000/api/users', {
-            phoneNumber,
-            password,
-          });
-          console.log(response.data);          
+            const response = await axios.post('http://192.168.122.105:3000/api/users/register', {
+                username,
+                phoneNumber,
+                password,
+            });
+            console.log(response.data);
 
-          if (response.data.navigate === 'HomeScreen') {
-            navigation.navigate('UserHomePage');
-            alert('Welcome');            
-          } else if (response.data.navigate === 'EnterUsername') {
-            navigation.navigate('EnterUserName');
-            alert('Thankyou for Registering');
-          }
+            if (response.data.success) {
+                navigation.navigate('UserHomePage');
+                alert('Thank you for registering!');
+            } else {
+                alert('Error registering user');
+            }
         } catch (error) {
-          console.log(error);
-          alert('Error adding user');
+            console.log(error);
+            alert('Error registering user');
         }
-      };
-      
+    };
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
@@ -47,12 +48,24 @@ const Login = () => {
                     <Text style={styles.para}>We will send an <Text style={styles.spanText}>One Time Password</Text> to your phone</Text>
                 </View>
                 <View style={styles.imageCon}>
-                    <Image source={{ uri: 'https://pngimg.com/uploads/phone_hand/phone_hand_PNG98.png' }} style={styles.image2}/>
+                    <Image  source={require('../assets/Login-bro.png')} style={styles.image2}/>
                 </View>
                 <View style={styles.buttonCover3}>
-                    <Text style={styles.para3}>Enter your Phone Number</Text>
+                    <Text style={styles.para3}>Enter your Phone Number and Name</Text>
                 </View>
                 <View style={styles.buttInp}>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="  eg: John Doe"
+                            placeholderTextColor="#aaaaaa"
+                            underlineColorAndroid="transparent"
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            value={username}
+                            onChangeText={setUsername}
+                        />
+                    </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -62,11 +75,9 @@ const Login = () => {
                             keyboardType="numeric"
                             returnKeyType="done"
                             onSubmitEditing={Keyboard.dismiss}
-
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
                         />
-                        
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -74,17 +85,18 @@ const Login = () => {
                             placeholder="password"
                             placeholderTextColor="#aaaaaa"
                             underlineColorAndroid="transparent"
-                            keyboardType="numeric"
+                            secureTextEntry={true}
                             returnKeyType="done"
                             onSubmitEditing={Keyboard.dismiss}
-
                             value={password}
                             onChangeText={setPassword}
                         />
-                        
                     </View>
                     <TouchableOpacity style={styles.buttonCover2} onPress={handleSubmit}>
-                        <Text style={styles.text2}>SEND OTP</Text>
+                        <Text style={styles.text2}>Register</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonCover4} onPress={() => navigation.navigate('EnterUserName')}>
+                        <Text style={styles.text5}>Login ?</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
@@ -115,16 +127,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 125, 
-        width: 250, 
-        height: 250, 
+        width: 200, 
+        height: 200, 
         overflow: "hidden", 
-        backgroundColor: "#FF8787",
+        backgroundColor: "#fff",
         alignSelf: "center", 
         marginTop: 30,
     },
     image2: {
-        width: '80%',
-        height: '80%',
+        width: '100%',
+        height: '100%',
         resizeMode: 'contain', 
     },
     text: {
@@ -133,6 +145,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         marginTop: 30,
+    },
+    text5:{
+        color: "red",
+        fontWeight: "bold",
     },
     para: {
         fontSize: 16,
@@ -155,6 +171,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center",
         marginTop: 20,
+    },
+    buttonCover4:{
+        borderRadius: 10,
+        width: 250,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        alignSelf: "center",
+        marginTop: 10,
     },
     para2: {
         fontSize: 16,
