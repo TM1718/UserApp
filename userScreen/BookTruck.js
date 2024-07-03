@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity,ScrollView, Dimensi
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNPickerSelect from 'react-native-picker-select';
+import { useNavigation } from '@react-navigation/native';
 
 
 const { width, height } = Dimensions.get('window');
@@ -17,6 +18,7 @@ const BookTruck = () => {
   const [showToDatePicker, setShowToDatePicker] = React.useState(false);
   const [showFromTimePicker, setShowFromTimePicker] = React.useState(false);
   const [showToTimePicker, setShowToTimePicker] = React.useState(false);
+  const navigation = useNavigation();
 
   const handleFromDateChange = (event, selectedDate) => {
     setShowFromDatePicker(false);
@@ -150,7 +152,7 @@ const BookTruck = () => {
           }}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       </View>

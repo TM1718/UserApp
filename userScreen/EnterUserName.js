@@ -39,8 +39,6 @@ const EnterUserName = () => {
                     </View>
 
             </View>
-            
-
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate("UserHomePage")}

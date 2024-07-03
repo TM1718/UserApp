@@ -1,11 +1,36 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
 const Login = () => {
     const navigation = useNavigation();
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async () => {
+        try {
+          const response = await axios.post('http://192.168.122.105:3000/api/users', {
+            phoneNumber,
+            password,
+          });
+          console.log(response.data);          
+
+          if (response.data.navigate === 'HomeScreen') {
+            navigation.navigate('UserHomePage');
+            alert('Welcome');            
+          } else if (response.data.navigate === 'EnterUsername') {
+            navigation.navigate('EnterUserName');
+            alert('Thankyou for Registering');
+          }
+        } catch (error) {
+          console.log(error);
+          alert('Error adding user');
+        }
+      };
+      
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
@@ -37,9 +62,28 @@ const Login = () => {
                             keyboardType="numeric"
                             returnKeyType="done"
                             onSubmitEditing={Keyboard.dismiss}
+
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
                         />
+                        
                     </View>
-                    <TouchableOpacity style={styles.buttonCover2} onPress={() => navigation.navigate('UserOtp')}>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="password"
+                            placeholderTextColor="#aaaaaa"
+                            underlineColorAndroid="transparent"
+                            keyboardType="numeric"
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        
+                    </View>
+                    <TouchableOpacity style={styles.buttonCover2} onPress={handleSubmit}>
                         <Text style={styles.text2}>SEND OTP</Text>
                     </TouchableOpacity>
                 </View>

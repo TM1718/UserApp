@@ -49,7 +49,7 @@ function ChooseCat() {
                 <Text style={styles.text}>Monitor Trucks</Text>
               </View>
           </View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={ () => navigation.navigate('Testing') }>
             <Text style={styles.buttonText}>Choose</Text>
           </TouchableOpacity>
         </View>
