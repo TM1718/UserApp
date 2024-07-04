@@ -20,10 +20,11 @@ const Login = () => {
                 password,
             });
             console.log(response.data);
-
+    
             if (response.data.success) {
                 await AsyncStorage.setItem('userId', response.data.userId);
                 await AsyncStorage.setItem('username', response.data.username);
+                await AsyncStorage.setItem('phoneNumber', response.data.phoneNumber); // Store phone number
                 navigation.navigate('UserHomePage');
                 alert('Thank you for registering!');
             } else {
@@ -34,6 +35,7 @@ const Login = () => {
             alert('Error registering user');
         }
     };
+    
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
