@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
@@ -21,6 +22,8 @@ const Login = () => {
             console.log(response.data);
 
             if (response.data.success) {
+                await AsyncStorage.setItem('userId', response.data.userId);
+                await AsyncStorage.setItem('username', response.data.username);
                 navigation.navigate('UserHomePage');
                 alert('Thank you for registering!');
             } else {

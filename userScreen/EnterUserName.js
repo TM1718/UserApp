@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
@@ -9,8 +10,11 @@ const EnterUserName = () => {
     const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
+        setIsLoading(true);
+
         try {
             const response = await axios.post('http://192.168.122.105:3000/api/users/login', {
                 phoneNumber,
@@ -19,6 +23,8 @@ const EnterUserName = () => {
             console.log(response.data);
 
             if (response.data.success) {
+                await AsyncStorage.setItem('userId', response.data.userId);
+                await AsyncStorage.setItem('username', response.data.username);
                 navigation.navigate('UserHomePage');
                 alert('Welcome!');
             } else {
@@ -27,6 +33,8 @@ const EnterUserName = () => {
         } catch (error) {
             console.log(error);
             alert('Error logging in');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -78,9 +86,18 @@ const EnterUserName = () => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleSubmit}
+                    disabled={isLoading}
                 >
                     <Text style={styles.buttonText}>Continue</Text>
                 </TouchableOpacity>
+
+                {isLoading && (
+                    <ActivityIndicator
+                        style={{ marginTop: 20 }}
+                        size="large"
+                        color="#FF6347"
+                    />
+                )}
             </View>
         </View>
     );

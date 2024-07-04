@@ -1,24 +1,78 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity,ScrollView, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Example: Using AsyncStorage for user data storage
 
 const { width, height } = Dimensions.get('window');
+
 const BookTruck = () => {
-  const [goodsName, setGoodsName] = React.useState('');
-  const [vehicleCount, setVehicleCount] = React.useState('');
-  const [fromDate, setFromDate] = React.useState(new Date());
-  const [toDate, setToDate] = React.useState(new Date());
-  const [fromTime, setFromTime] = React.useState(new Date());
-  const [toTime, setToTime] = React.useState(new Date());
-  const [showFromDatePicker, setShowFromDatePicker] = React.useState(false);
-  const [showToDatePicker, setShowToDatePicker] = React.useState(false);
-  const [showFromTimePicker, setShowFromTimePicker] = React.useState(false);
-  const [showToTimePicker, setShowToTimePicker] = React.useState(false);
+  const [goodsName, setGoodsName] = useState('');
+  const [vehicleCount, setVehicleCount] = useState('');
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [fromTime, setFromTime] = useState(new Date());
+  const [toTime, setToTime] = useState(new Date());
+  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
+  const [showToDatePicker, setShowToDatePicker] = useState(false);
+  const [showFromTimePicker, setShowFromTimePicker] = useState(false);
+  const [showToTimePicker, setShowToTimePicker] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState('');
   const navigation = useNavigation();
+
+  useEffect(() => {
+    fetchUserData(); // Fetch user data when component mounts
+  }, []);
+  
+  const fetchUserData = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem('userId');
+      const storedUsername = await AsyncStorage.getItem('username');
+  
+      if (storedUserId && storedUsername) {
+        setUserId(storedUserId);
+        setUsername(storedUsername);
+      } else {
+        console.log('User data not found');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
+
+  const handleSubmit = async () => {
+    if (!userId || !username) {
+      Alert.alert('Error', 'User ID or username is missing.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://192.168.122.105:3000/api/userRequests', {
+        userId,
+        username,
+        goodsName,
+        vehicleCount: parseInt(vehicleCount),
+        fromDate,
+        toDate,
+        fromTime: fromTime.toLocaleTimeString().split(' ')[0],
+        toTime: toTime.toLocaleTimeString().split(' ')[0],
+        company: 'selected_company_here', // Replace with actual selected company
+      });
+  
+      console.log(response.data);
+      Alert.alert('Success', 'Truck booking request submitted successfully!');
+      navigation.goBack(); // Navigate back after successful submission
+    } catch (error) {
+      console.error('Error submitting request:', error);
+      Alert.alert('Error', 'Failed to submit truck booking request. Please try again later.');
+    }
+  };
+  
 
   const handleFromDateChange = (event, selectedDate) => {
     setShowFromDatePicker(false);
@@ -52,7 +106,7 @@ const BookTruck = () => {
     <ScrollView style={styles.Scrollcontainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Fill in for the best Transport Service!</Text>
-        
+
         <Text style={styles.label}>Goods type</Text>
         <TextInput
           style={styles.input}
@@ -60,7 +114,7 @@ const BookTruck = () => {
           onChangeText={setGoodsName}
           placeholder="Enter goods name"
         />
-        
+
         <Text style={styles.label}>Vehicle Count</Text>
         <TextInput
           style={styles.input}
@@ -106,7 +160,7 @@ const BookTruck = () => {
           <View style={styles.dateTimeField}>
             <Text style={styles.label}>From Time</Text>
             <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.input}>
-              <Text>{fromTime.toTimeString().split(' ')[0]}</Text>
+              <Text>{fromTime.toLocaleTimeString().split(' ')[0]}</Text>
               <Icon name="clock-o" size={24} color="black" />
             </TouchableOpacity>
             {showFromTimePicker && (
@@ -122,7 +176,7 @@ const BookTruck = () => {
           <View style={styles.dateTimeField}>
             <Text style={styles.label}>To Time</Text>
             <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.input}>
-              <Text>{toTime.toTimeString().split(' ')[0]}</Text>
+              <Text>{toTime.toLocaleTimeString().split(' ')[0]}</Text>
               <Icon name="clock-o" size={24} color="black" />
             </TouchableOpacity>
             {showToTimePicker && (
@@ -152,7 +206,7 @@ const BookTruck = () => {
           }}
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       </View>
