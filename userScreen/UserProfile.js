@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserProfile = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+
+  const fetchUserDetails = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+
+      if (userId) {
+        const response = await fetch(`http://192.168.122.105:3000/api/users/${userId}`);
+        const data = await response.json();
+        setUsername(data.username);
+        setPhoneNumber(data.phoneNumber);
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -19,9 +41,9 @@ const UserProfile = ({ navigation }) => {
         <View style={styles.profileContainer}>
           <Image source={{ uri: 'https://www.366icons.com/media/01/profile-avatar-account-icon-16699.png' }} style={styles.profileImage} />
           <Text style={styles.label}>Name:</Text>
-          <Text style={styles.sampleText}>John Doe</Text>
+          <Text style={styles.sampleText}>{username}</Text>
           <Text style={styles.label}>Mobile:</Text>
-          <Text style={styles.sampleText}>+1234567890</Text>
+          <Text style={styles.sampleText}>{phoneNumber}</Text>
         </View>
         <TouchableOpacity style={styles.editProfileButton}>
           <Text style={styles.editProfileText}>Edit Profile</Text>
@@ -126,7 +148,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#ddd',
     backgroundColor: '#f8f8f8',
   },
-  navItem: {
+  navItem: {  
     alignItems: 'center',
   },
 });

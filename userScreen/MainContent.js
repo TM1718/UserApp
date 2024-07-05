@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 10,
     },
     card: {
-        width: width * 0.88,  // Adjust width as needed
+        width: width * 0.88,
         height: height * 0.3,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,

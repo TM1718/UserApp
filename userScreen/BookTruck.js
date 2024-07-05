@@ -254,7 +254,9 @@ const BookTruck = () => {
                 </TouchableOpacity>
 
                 {loading && (
-                    <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    </View>
                 )}
             </View>
         </ScrollView>
@@ -344,8 +346,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    loadingIndicator: {
-        marginTop: 20,
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

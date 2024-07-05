@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, TextInput, View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -20,22 +20,23 @@ const Login = () => {
                 password,
             });
             console.log(response.data);
-    
+
             if (response.data.success) {
                 await AsyncStorage.setItem('userId', response.data.userId);
                 await AsyncStorage.setItem('username', response.data.username);
-                await AsyncStorage.setItem('phoneNumber', response.data.phoneNumber); // Store phone number
+                if (response.data.phoneNumber) {
+                    await AsyncStorage.setItem('phoneNumber', response.data.phoneNumber);
+                }
                 navigation.navigate('UserHomePage');
-                alert('Thank you for registering!');
+                Alert.alert('Success', 'Thank you for registering!');
             } else {
-                alert('Error registering user');
+                Alert.alert('Error', 'Error registering user');
             }
         } catch (error) {
-            console.log(error);
-            alert('Error registering user');
+            console.error(error);
+            Alert.alert('Error', 'Error registering user');
         }
     };
-    
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
