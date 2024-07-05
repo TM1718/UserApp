@@ -6,12 +6,13 @@ import Login from './userScreen/Login';
 import Otp from './userScreen/Otp';
 import EnterUserName from './userScreen/EnterUserName';
 import UserHomePage from './userScreen/UserHomePage';
-import BookTruck from './userScreen/BookTruck';
+import BookTruckPage1 from './userScreen/BookTruckPage1';
 import UserInbox from './userScreen/UserInbox';
 import TruckRecords from './userScreen/TruckRecords';
 import UserProfile from './userScreen/UserProfile';
 import AiPage from './userScreen/AiPage';
 import Testing from './userScreen/Testing';
+import BookTruckPage2 from './userScreen/BookTruckPage2';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -28,7 +29,8 @@ export default function App() {
         <Stack.Screen name="UserOtp" component={Otp} />
         <Stack.Screen name="EnterUserName" component={EnterUserName} />
         <Stack.Screen name='UserHomePage' component={UserHomePage} />
-        <Stack.Screen name='BookTruck' component={BookTruck} />
+        <Stack.Screen name='BookTruckPage1' component={BookTruckPage1} />
+        <Stack.Screen name='BookTruckPage2' component={BookTruckPage2} />
         <Stack.Screen name='UserInbox' component={UserInbox} />
         <Stack.Screen name='TruckRecords' component={TruckRecords} />
         <Stack.Screen name='UserProfile' component={UserProfile} />
