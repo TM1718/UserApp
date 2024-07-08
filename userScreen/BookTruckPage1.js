@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-datepicker'; // Import DatePicker from react-datepicker for web
+import 'react-datepicker/dist/react-datepicker.css'; // Import styles for react-datepicker
 import { useNavigation } from '@react-navigation/native';
 
 const BookTruckPage1 = () => {
   const navigation = useNavigation();
   const [goodsName, setGoodsName] = useState('');
   const [vehicleCount, setVehicleCount] = useState('');
-  const [fromDate, setFromDate] = useState('--');
-  const [toDate, setToDate] = useState('--');
-  const [fromTime, setFromTime] = useState('--');
-  const [toTime, setToTime] = useState('--');
+  const [fromDate, setFromDate] = useState(null); // Change initial state to null for react-datepicker
+  const [toDate, setToDate] = useState(null); // Change initial state to null for react-datepicker
+  const [fromTime, setFromTime] = useState(null); // Change initial state to null for react-datepicker
+  const [toTime, setToTime] = useState(null); // Change initial state to null for react-datepicker
   const [errors, setErrors] = useState({});
   const [showPicker, setShowPicker] = useState(null); // State to manage which picker to show
 
@@ -18,10 +19,10 @@ const BookTruckPage1 = () => {
     const errors = {};
     if (!goodsName.trim()) errors.goodsName = true;
     if (!vehicleCount.trim()) errors.vehicleCount = true;
-    if (!fromDate || fromDate === '--') errors.fromDate = true;
-    if (!toDate || toDate === '--') errors.toDate = true;
-    if (!fromTime || fromTime === '--') errors.fromTime = true;
-    if (!toTime || toTime === '--') errors.toTime = true;
+    if (!fromDate) errors.fromDate = true;
+    if (!toDate) errors.toDate = true;
+    if (!fromTime) errors.fromTime = true;
+    if (!toTime) errors.toTime = true;
 
     setErrors(errors);
 
@@ -48,9 +49,9 @@ const BookTruckPage1 = () => {
     setShowPicker(mode); // Set the mode to show the correct picker
   };
 
-  const handleDateChange = (event, selectedDate) => {
+  const handleDateChange = (selectedDate) => {
     setShowPicker(null); // Hide the picker after selection
-  
+
     if (selectedDate) {
       if (showPicker === 'date') {
         if (selectedDate >= toDate) {
@@ -77,14 +78,6 @@ const BookTruckPage1 = () => {
       }
     }
   };
-  
-
-  // Function to check if selected time is future time
-  const isTimeFuture = (selectedTime) => {
-    const now = new Date();
-    return selectedTime.getHours() > now.getHours() ||
-      (selectedTime.getHours() === now.getHours() && selectedTime.getMinutes() > now.getMinutes());
-  };
 
   return (
     <View style={styles.container}>
@@ -106,72 +99,72 @@ const BookTruckPage1 = () => {
       />
 
       <Text style={styles.label}>From Date:</Text>
+      {showPicker === 'date' && (
+        <DatePicker
+          selected={fromDate}
+          onChange={date => handleDateChange(date)}
+          dateFormat="MM/dd/yyyy"
+          minDate={new Date()}
+          placeholderText="Select date"
+          className="datepicker"
+        />
+      )}
       <TouchableOpacity onPress={() => openDateTimePicker(setFromDate, 'date')} style={[styles.input, errors.fromDate && styles.inputError]}>
-        <Text>{fromDate === '--' ? fromDate : fromDate.toLocaleDateString()}</Text>
+        <Text>{fromDate ? fromDate.toLocaleDateString() : '--'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.label}>To Date:</Text>
+      {showPicker === 'toDate' && (
+        <DatePicker
+          selected={toDate}
+          onChange={date => handleDateChange(date)}
+          dateFormat="MM/dd/yyyy"
+          minDate={fromDate || new Date()}
+          placeholderText="Select date"
+          className="datepicker"
+        />
+      )}
       <TouchableOpacity onPress={() => openDateTimePicker(setToDate, 'toDate')} style={[styles.input, errors.toDate && styles.inputError]}>
-        <Text>{toDate === '--' ? toDate : toDate.toLocaleDateString()}</Text>
+        <Text>{toDate ? toDate.toLocaleDateString() : '--'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.label}>From Time:</Text>
+      {showPicker === 'time' && (
+        <DatePicker
+          selected={fromTime}
+          onChange={date => handleDateChange(date)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          dateFormat="h:mm aa"
+          placeholderText="Select time"
+          className="datepicker"
+        />
+      )}
       <TouchableOpacity onPress={() => openDateTimePicker(setFromTime, 'time')} style={[styles.input, errors.fromTime && styles.inputError]}>
-        <Text>{fromTime === '--' ? fromTime : fromTime.toLocaleTimeString()}</Text>
+        <Text>{fromTime ? fromTime.toLocaleTimeString() : '--'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.label}>To Time:</Text>
+      {showPicker === 'toTime' && (
+        <DatePicker
+          selected={toTime}
+          onChange={date => handleDateChange(date)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          dateFormat="h:mm aa"
+          placeholderText="Select time"
+          className="datepicker"
+        />
+      )}
       <TouchableOpacity onPress={() => openDateTimePicker(setToTime, 'toTime')} style={[styles.input, errors.toTime && styles.inputError]}>
-        <Text>{toTime === '--' ? toTime : toTime.toLocaleTimeString()}</Text>
+        <Text>{toTime ? toTime.toLocaleTimeString() : '--'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={handleSubmit} style={styles.button}>
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
-
-      {showPicker === 'date' && (
-        <DateTimePicker
-          value={fromDate === '--' ? new Date() : fromDate}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          minimumDate={new Date()} // Only allow future dates
-          onChange={(event, date) => handleDateChange(event, date)}
-        />
-      )}
-
-      {showPicker === 'toDate' && (
-        <DateTimePicker
-          value={toDate === '--' ? new Date() : toDate}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          minimumDate={fromDate === '--' ? new Date() : fromDate} // Minimum date is the fromDate
-          onChange={(event, date) => handleDateChange(event, date)}
-        />
-      )}
-
-      {showPicker === 'time' && (
-        <DateTimePicker
-            value={fromTime === '--' ? new Date() : fromTime}
-            mode="time"
-            is24Hour={false} // Display time in 12-hour format
-            display="default"
-            onChange={(event, date) => handleDateChange(event, date)}
-        />
-        )}
-
-        {showPicker === 'toTime' && (
-        <DateTimePicker
-            value={toTime === '--' ? new Date() : toTime}
-            mode="time"
-            is24Hour={false} // Display time in 12-hour format
-            display="default"
-            minimumDate={fromTime === '--' ? new Date() : fromTime} // Minimum time is the fromTime
-            onChange={(event, date) => handleDateChange(event, date)}
-        />
-        )}
-
     </View>
   );
 };
