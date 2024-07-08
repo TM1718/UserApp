@@ -50,8 +50,7 @@ const BookTruckPage1 = () => {
 
   const handleDateChange = (event, selectedDate) => {
     setShowPicker(null); // Hide the picker after selection
-
-    // Ensure selectedDate is valid and not past or reverse
+  
     if (selectedDate) {
       if (showPicker === 'date') {
         if (selectedDate >= toDate) {
@@ -70,24 +69,15 @@ const BookTruckPage1 = () => {
           setToDate(selectedDate);
         }
       } else if (showPicker === 'time') {
-        if (selectedDate >= toTime) {
-          Alert.alert('Invalid Time', 'From time must be before To time.');
-        } else if (!isTimeFuture(selectedDate)) {
-          Alert.alert('Invalid Time', 'Please select a future time.');
-        } else {
-          setFromTime(selectedDate);
-        }
+        // Directly set the time without checking future time
+        setFromTime(selectedDate);
       } else if (showPicker === 'toTime') {
-        if (selectedDate <= fromTime) {
-          Alert.alert('Invalid Time', 'To time must be after From time.');
-        } else if (!isTimeFuture(selectedDate)) {
-          Alert.alert('Invalid Time', 'Please select a future time.');
-        } else {
-          setToTime(selectedDate);
-        }
+        // Directly set the time without checking future time
+        setToTime(selectedDate);
       }
     }
   };
+  
 
   // Function to check if selected time is future time
   const isTimeFuture = (selectedTime) => {

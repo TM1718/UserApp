@@ -24,6 +24,7 @@ const BookTruckPage2 = () => {
   const fetchCompanies = async () => {
     try {
       const response = await axios.get('http://192.168.122.105:3000/api/companies');
+      console.log('API Response:', response.data); // Debugging line
       setCompanies(response.data);
     } catch (error) {
       console.error('Error fetching companies:', error);
@@ -161,4 +162,3 @@ const styles = StyleSheet.create({
 });
 
 export default BookTruckPage2;
-
