@@ -13,6 +13,8 @@ import UserProfile from './userScreen/UserProfile';
 import AiPage from './userScreen/AiPage';
 import Testing from './userScreen/Testing';
 import BookTruckPage2 from './userScreen/BookTruckPage2';
+import EditUserRequest from './userScreen/EditUserRequest';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -36,6 +38,7 @@ export default function App() {
         <Stack.Screen name='UserProfile' component={UserProfile} />
         <Stack.Screen name='AiPage' component={AiPage}/>
         <Stack.Screen name='Testing' component={Testing}/>
+        <Stack.Screen name='EditUserRequest' component={EditUserRequest}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

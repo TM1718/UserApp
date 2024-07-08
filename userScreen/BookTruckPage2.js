@@ -47,13 +47,24 @@ const BookTruckPage2 = () => {
       Alert.alert('Error', 'Please fill all the fields.');
       return;
     }
-
+  
     try {
       setLoading(true);
       const userId = await AsyncStorage.getItem('userId');
       const username = await AsyncStorage.getItem('username');
       const userPhoneNumber = await AsyncStorage.getItem('phoneNumber');
-
+  
+      // Format time to extract only the time part
+      const formatTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+      };
+  
+      const formattedFromTime = formatTime(fromTime);
+      const formattedToTime = formatTime(toTime);
+  
       const response = await axios.post('http://192.168.122.105:3000/api/userRequests', {
         userId,
         username,
@@ -62,13 +73,13 @@ const BookTruckPage2 = () => {
         vehicleCount,
         fromDate,
         toDate,
-        fromTime,
-        toTime,
+        fromTime: formattedFromTime,
+        toTime: formattedToTime,
         company,
         fromPlace,
         toPlace,
       });
-
+  
       setLoading(false);
       Alert.alert('Success', 'Truck booking request submitted successfully.');
       navigation.navigate('UserHomePage'); // Assuming 'Home' is the main screen
@@ -78,7 +89,7 @@ const BookTruckPage2 = () => {
       Alert.alert('Error', 'Failed to submit booking request. Please try again.');
     }
   };
-
+  
   return (
     <ScrollView style={styles.container}>
       <View>

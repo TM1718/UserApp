@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
-import DatePicker from 'react-datepicker'; // Import DatePicker from react-datepicker for web
-import 'react-datepicker/dist/react-datepicker.css'; // Import styles for react-datepicker
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 
 const BookTruckPage1 = () => {
   const navigation = useNavigation();
   const [goodsName, setGoodsName] = useState('');
   const [vehicleCount, setVehicleCount] = useState('');
-  const [fromDate, setFromDate] = useState(null); // Change initial state to null for react-datepicker
-  const [toDate, setToDate] = useState(null); // Change initial state to null for react-datepicker
-  const [fromTime, setFromTime] = useState(null); // Change initial state to null for react-datepicker
-  const [toTime, setToTime] = useState(null); // Change initial state to null for react-datepicker
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [fromTime, setFromTime] = useState(new Date());
+  const [toTime, setToTime] = useState(new Date());
   const [errors, setErrors] = useState({});
   const [showPicker, setShowPicker] = useState(null); // State to manage which picker to show
 
@@ -45,37 +44,11 @@ const BookTruckPage1 = () => {
     });
   };
 
-  const openDateTimePicker = (stateSetter, mode) => {
-    setShowPicker(mode); // Set the mode to show the correct picker
-  };
-
-  const handleDateChange = (selectedDate) => {
+  const handleDateChange = (event, selectedDate, dateSetter) => {
     setShowPicker(null); // Hide the picker after selection
 
-    if (selectedDate) {
-      if (showPicker === 'date') {
-        if (selectedDate >= toDate) {
-          Alert.alert('Invalid Date', 'From date must be before To date.');
-        } else if (selectedDate < new Date()) {
-          Alert.alert('Invalid Date', 'Please select a future date.');
-        } else {
-          setFromDate(selectedDate);
-        }
-      } else if (showPicker === 'toDate') {
-        if (selectedDate <= fromDate) {
-          Alert.alert('Invalid Date', 'To date must be after From date.');
-        } else if (selectedDate < new Date()) {
-          Alert.alert('Invalid Date', 'Please select a future date.');
-        } else {
-          setToDate(selectedDate);
-        }
-      } else if (showPicker === 'time') {
-        // Directly set the time without checking future time
-        setFromTime(selectedDate);
-      } else if (showPicker === 'toTime') {
-        // Directly set the time without checking future time
-        setToTime(selectedDate);
-      }
+    if (event.type === 'set' && selectedDate) {
+      dateSetter(selectedDate);
     }
   };
 
@@ -99,68 +72,56 @@ const BookTruckPage1 = () => {
       />
 
       <Text style={styles.label}>From Date:</Text>
-      {showPicker === 'date' && (
-        <DatePicker
-          selected={fromDate}
-          onChange={date => handleDateChange(date)}
-          dateFormat="MM/dd/yyyy"
-          minDate={new Date()}
-          placeholderText="Select date"
-          className="datepicker"
-        />
-      )}
-      <TouchableOpacity onPress={() => openDateTimePicker(setFromDate, 'date')} style={[styles.input, errors.fromDate && styles.inputError]}>
+      <TouchableOpacity onPress={() => setShowPicker('fromDate')} style={[styles.input, errors.fromDate && styles.inputError]}>
         <Text>{fromDate ? fromDate.toLocaleDateString() : '--'}</Text>
       </TouchableOpacity>
+      {showPicker === 'fromDate' && (
+        <DateTimePicker
+          value={fromDate}
+          mode="date"
+          display="default"
+          onChange={(event, date) => handleDateChange(event, date, setFromDate)}
+        />
+      )}
 
       <Text style={styles.label}>To Date:</Text>
-      {showPicker === 'toDate' && (
-        <DatePicker
-          selected={toDate}
-          onChange={date => handleDateChange(date)}
-          dateFormat="MM/dd/yyyy"
-          minDate={fromDate || new Date()}
-          placeholderText="Select date"
-          className="datepicker"
-        />
-      )}
-      <TouchableOpacity onPress={() => openDateTimePicker(setToDate, 'toDate')} style={[styles.input, errors.toDate && styles.inputError]}>
+      <TouchableOpacity onPress={() => setShowPicker('toDate')} style={[styles.input, errors.toDate && styles.inputError]}>
         <Text>{toDate ? toDate.toLocaleDateString() : '--'}</Text>
       </TouchableOpacity>
+      {showPicker === 'toDate' && (
+        <DateTimePicker
+          value={toDate}
+          mode="date"
+          display="default"
+          onChange={(event, date) => handleDateChange(event, date, setToDate)}
+        />
+      )}
 
       <Text style={styles.label}>From Time:</Text>
-      {showPicker === 'time' && (
-        <DatePicker
-          selected={fromTime}
-          onChange={date => handleDateChange(date)}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          dateFormat="h:mm aa"
-          placeholderText="Select time"
-          className="datepicker"
-        />
-      )}
-      <TouchableOpacity onPress={() => openDateTimePicker(setFromTime, 'time')} style={[styles.input, errors.fromTime && styles.inputError]}>
+      <TouchableOpacity onPress={() => setShowPicker('fromTime')} style={[styles.input, errors.fromTime && styles.inputError]}>
         <Text>{fromTime ? fromTime.toLocaleTimeString() : '--'}</Text>
       </TouchableOpacity>
-
-      <Text style={styles.label}>To Time:</Text>
-      {showPicker === 'toTime' && (
-        <DatePicker
-          selected={toTime}
-          onChange={date => handleDateChange(date)}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          dateFormat="h:mm aa"
-          placeholderText="Select time"
-          className="datepicker"
+      {showPicker === 'fromTime' && (
+        <DateTimePicker
+          value={fromTime}
+          mode="time"
+          display="default"
+          onChange={(event, date) => handleDateChange(event, date, setFromTime)}
         />
       )}
-      <TouchableOpacity onPress={() => openDateTimePicker(setToTime, 'toTime')} style={[styles.input, errors.toTime && styles.inputError]}>
+
+      <Text style={styles.label}>To Time:</Text>
+      <TouchableOpacity onPress={() => setShowPicker('toTime')} style={[styles.input, errors.toTime && styles.inputError]}>
         <Text>{toTime ? toTime.toLocaleTimeString() : '--'}</Text>
       </TouchableOpacity>
+      {showPicker === 'toTime' && (
+        <DateTimePicker
+          value={toTime}
+          mode="time"
+          display="default"
+          onChange={(event, date) => handleDateChange(event, date, setToTime)}
+        />
+      )}
 
       <TouchableOpacity onPress={handleSubmit} style={styles.button}>
         <Text style={styles.buttonText}>Next</Text>
@@ -168,7 +129,6 @@ const BookTruckPage1 = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
