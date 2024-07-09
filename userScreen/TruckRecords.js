@@ -102,13 +102,13 @@ const TruckRecords = ({ navigation }) => {
           style={[styles.button, styles.editButton]}
           onPress={() => handleEdit(item)}
         >
-          <Text style={styles.buttonText}>Edit</Text>
+          <Icon name="edit" size={20} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.deleteButton]}
           onPress={() => handleDelete(item._id)}
         >
-          <Text style={styles.buttonText}>Delete</Text>
+          <Icon name="trash" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
     </View>
@@ -122,10 +122,7 @@ const TruckRecords = ({ navigation }) => {
           <Icon name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <Text style={styles.appBarTitle}>Records</Text>
-        {/* Add Edit and Delete Buttons */}
-        <TouchableOpacity onPress={() => navigation.navigate('AddUserRequest')}>
-          <Icon name="plus" size={20} color="black" style={{ marginRight: 10 }} />
-        </TouchableOpacity>
+        
       </View>
 
       <View style={styles.content}>
@@ -241,7 +238,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 80,
+    minWidth: 40,
   },
   buttonText: {
     color: '#fff',

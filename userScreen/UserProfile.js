@@ -28,7 +28,7 @@ const UserProfile = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* App Bar */}
+      
       <View style={styles.appBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={20} color="black" />
@@ -36,7 +36,6 @@ const UserProfile = ({ navigation }) => {
         <Text style={styles.appBarTitle}>Profile</Text>
       </View>
 
-      {/* Main Content */}
       <View style={styles.content}>
         <View style={styles.profileContainer}>
           <Image source={{ uri: 'https://www.366icons.com/media/01/profile-avatar-account-icon-16699.png' }} style={styles.profileImage} />
