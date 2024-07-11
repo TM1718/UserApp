@@ -1,82 +1,73 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 function ChooseCat() {
-  const tickIcon = 'https://img.icons8.com/ios-filled/50/26e07f/checkmark.png';
   const [activeIndex, setActiveIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation(); 
-  const handleScroll = (event) => {
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+    { useNativeDriver: false }
+  );
+
+  const handleMomentumScrollEnd = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const currentIndex = Math.round(scrollPosition / width);
     setActiveIndex(currentIndex);
   };
 
+  const dotPosition = scrollX.interpolate({
+    inputRange: [0, width, width * 2],
+    outputRange: [0, 1, 2],
+    extrapolate: 'clamp'
+  });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Pick a Category</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.heading}>Choose Category</Text>
+        <Text style={styles.heading2}>For seemless experience!</Text>
+      </View>
       <ScrollView 
         horizontal 
         pagingEnabled 
         showsHorizontalScrollIndicator={false} 
         contentContainerStyle={styles.cardContainer}
         onScroll={handleScroll}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
         scrollEventThrottle={16}
       >
         <View style={styles.card}>
           <Image
-            source={{ uri: 'https://purepng.com/public/uploads/large/purepng.com-trucktruckpickup-truckbig-trucktrucks-1701527681534kbj6m.png' }}
+            source={require('../assets/Onlineworld.gif')}
             style={styles.image}
           />
           <Text style={styles.boldText}>Owner</Text>
           <View style={styles.textOuterContainer}>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Add trucks</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Monitor drivers</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Hire Driver</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Monitor Trucks</Text>
-              </View>
+            <Text style={styles.textpara}>
+              Our platform allows you to add trucks, monitor drivers, and hire new drivers effortlessly. 
+              Keep an eye on your trucks in real-time and leverage our marketing tools to enhance your operations.
+            </Text>
           </View>
-          <TouchableOpacity style={styles.button} onPress={ () => navigation.navigate('Testing') }>
+          <TouchableOpacity style={styles.button} onPress={ () => navigation.navigate('') }>
             <Text style={styles.buttonText}>Choose</Text>
           </TouchableOpacity>
         </View>
         
         <View style={styles.card}>
           <Image
-            source={{ uri: 'https://static.vecteezy.com/system/resources/thumbnails/027/309/183/small_2x/driver-with-ai-generated-free-png.png' }}
-            style={styles.image2}
+            source={require('../assets/bus_driver.gif')}
+            style={styles.image}
           />
           <Text style={styles.boldText}>Driver</Text>
           <View style={styles.textOuterContainer}>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Get hired</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Easy Navigation</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Easy job management</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Monitor product</Text>
-              </View>
+            <Text style={styles.textpara}>
+              Get hired easily and navigate your routes with ease. Manage your jobs efficiently and monitor the product you're transporting.
+            </Text>
           </View>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Choose</Text>
@@ -85,27 +76,14 @@ function ChooseCat() {
         
         <View style={styles.card}>
           <Image
-            source={{ uri: 'https://th.bing.com/th/id/R.2b90add718221d91a5b48f2fb88d012a?rik=FYL%2fW79homI3Jw&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fdownload_552555.png&ehk=qbsK1y2W2OXIDJX2qDIvEZMj%2fAa%2bNZxslVAguvc72gs%3d&risl=&pid=ImgRaw&r=0' }}
-            style={styles.image3}
+            source={require('../assets/Windows-rafiki.png')}
+            style={styles.image}
           />
           <Text style={styles.boldText}>User</Text>
           <View style={styles.textOuterContainer}>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Book trucks</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Track Product</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Easy booking</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Image source={{ uri: tickIcon }} style={styles.tickIcon} />
-                <Text style={styles.text}>Secured connection</Text>
-              </View>
+            <Text style={styles.textpara}>
+              Book trucks conveniently and track your product in real-time. Enjoy easy booking and a secured connection for all your transactions.
+            </Text>
           </View>
           <TouchableOpacity style={styles.button} onPress={ () => navigation.navigate('UserLogin') }>
             <Text style={styles.buttonText}>Choose</Text>
@@ -114,24 +92,65 @@ function ChooseCat() {
       </ScrollView>
 
       <View style={styles.pagination}>
-        <View style={[styles.dot, activeIndex === 0 && styles.activeDot]} />
-        <View style={[styles.dot, activeIndex === 1 && styles.activeDot]} />
-        <View style={[styles.dot, activeIndex === 2 && styles.activeDot]} />
+        {[0, 1, 2].map((_, i) => {
+          const opacity = dotPosition.interpolate({
+            inputRange: [i - 1, i, i + 1],
+            outputRange: [0.3, 1, 0.3],
+            extrapolate: 'clamp',
+          });
+
+          const scale = dotPosition.interpolate({
+            inputRange: [i - 1, i, i + 1],
+            outputRange: [0.8, 1.4, 1],
+            extrapolate: 'clamp',
+          });
+
+          return (
+            <Animated.View 
+              key={i} 
+              style={[
+                styles.dot, 
+                { opacity, transform: [{ scale }] },
+                activeIndex === i && styles.activeDot
+              ]}
+            >
+              {activeIndex === i && <View style={styles.innerDot} />}
+            </Animated.View>
+          );
+        })}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  headerContainer:{
+    height: 100,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    backgroundColor: '#FFF1F1',  
+  },
+  heading:{
+    fontSize: 27,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 20,
+  },
+  heading2:{
+    fontSize: 13,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  textpara: {
     textAlign: 'center',
-    marginTop: 76,
+    fontSize: 14,
+    marginTop: 50,
   },
   cardContainer: {
     alignItems: 'center',
@@ -139,7 +158,7 @@ const styles = StyleSheet.create({
   card: {
     width: width - 32,
     height: height - 170, // Adjust height to leave space for header and button
-    backgroundColor: '#F0EBEB',
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -147,77 +166,59 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 16,
-  },
-  image2: {
-    width: 200,
-    height: 150,
-    resizeMode: 'contain',
-    marginBottom: 16,
-  },
-  image3: {
-    width: 200,
-    height: 150,
-    resizeMode: 'contain',
-    marginBottom: 16,
+    width: 265,
+    height: 250,
+    marginBottom: 25,
   },
   boldText: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: -30,
   },
   textOuterContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    alignSelf: 'center',
-    justifyContent: 'center', 
-  },
-  textContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    marginBottom: 4,
-    justifyContent: 'flex-start',
-  },
-  tickIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 8,
-  },
-  text: {
-    fontSize: 20,
-    color: '#8B5454',
+    width: '100%',
   },
   button: {
     backgroundColor: '#FF6347',
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    width: '80%',
+    marginTop: 20,
+    bottom: 0,
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 'bold',
   },
-  pagination: {
+  pagination: { 
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    position: 'absolute',
+    bottom: 30, // Adjust this value based on your layout needs
+    left: 0,
+    right: 0,
   },
   dot: {
-    height: 10,
-    width: 10,
+    height: 12,
+    width: 12,
     backgroundColor: '#C3C3C3',
-    borderRadius: 5,
+    borderRadius: 10,
     marginHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   activeDot: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#620707',
+  },
+  innerDot: {
+    height: 6,
+    width: 6,
     backgroundColor: '#620707',
+    borderRadius: 3,
   },
 });
 
